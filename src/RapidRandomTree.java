@@ -80,6 +80,7 @@ public class RapidRandomTree {
             n.display();
             parent.fill(255, 255, 0);
         }
+        startNode.display();
         goalNode.display();
     }
 

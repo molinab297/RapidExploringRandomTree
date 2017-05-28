@@ -11,7 +11,7 @@ public class TreeNode extends Shape{
         super(xCoord,yCoord,width,height,color, parent);
     }
 
-    public TreeNode(float xCoord, float yCoord, int width, int height, int color, PApplet parent, TreeNode parentNode){
+    public TreeNode(int xCoord, int yCoord, int width, int height, int color, PApplet parent, TreeNode parentNode){
         super(xCoord,yCoord,width,height,color, parent);
         this.parentNode = parentNode;
     }
