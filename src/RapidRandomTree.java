@@ -2,6 +2,7 @@ import processing.core.PApplet;
 import java.util.Random;
 import java.util.ArrayList;
 
+import static processing.core.PApplet.parseByte;
 import static processing.core.PApplet.sq;
 import static processing.core.PApplet.sqrt;
 
@@ -45,14 +46,14 @@ public class RapidRandomTree {
     }
 
     // Returns nearest node to a pair of vertices (goalNode) on the main screen
-    public TreeNode getNearestNode(int xCoord, int yCoord){
+    public TreeNode getNearestNode(float xCoord, float yCoord){
         TreeNode nearestNode = startNode;
-        float distance = parent.dist(startNode.getxCoord(), startNode.getyCoord(), xCoord, yCoord);
+        float shortestDistance = parent.dist(nearestNode.getxCoord(), nearestNode.getyCoord(), xCoord, yCoord);
         for(TreeNode currentNode : nodeList){
             float temp = parent.dist(currentNode.getxCoord(), currentNode.getyCoord(), xCoord, yCoord);
-            if(temp < distance){
+            if(temp < shortestDistance){
                 nearestNode = currentNode;
-                distance = temp;
+                shortestDistance = temp;
             }
         }
         return nearestNode;
@@ -60,8 +61,8 @@ public class RapidRandomTree {
 
     public TreeNode getRandomConfig(){
         Random rand = new Random();
-        int randomXCoord = rand.nextInt(rrt.SCREEN_WIDTH) + 1;
-        int randomYCoord = rand.nextInt(rrt.SCREEN_HEIGHT) + 1;
+        float randomXCoord = rand.nextInt(rrt.SCREEN_WIDTH) + 1;
+        float randomYCoord = rand.nextInt(rrt.SCREEN_HEIGHT) + 1;
         return new TreeNode(randomXCoord, randomYCoord, rrt.NODE_WIDTH, rrt.NODE_HEIGHT, rrt.node_color, parent);
     }
 
@@ -79,6 +80,7 @@ public class RapidRandomTree {
             n.display();
             parent.fill(255, 255, 0);
         }
+        goalNode.display();
     }
 
     // Draws all edges in the graph to the screen.
@@ -103,9 +105,29 @@ public class RapidRandomTree {
     // Returns true if a vertex 'a' is intersecting with an obstacle object
     public boolean intersectingObstacle(TreeNode a){
         for(Obstacle o : obstacleList) {
-            return (a.getxCoord() >= o.getxCoord() && a.getxCoord() <= o.getxCoord() + o.getWidth()
-                    && a.getyCoord() >= o.getyCoord() && a.getyCoord() <= o.getyCoord() + o.getHeight());
+            if(a.getxCoord() >= o.getxCoord() && a.getxCoord() <= o.getxCoord() + o.getWidth()
+                    && a.getyCoord() >= o.getyCoord() && a.getyCoord() <= o.getyCoord() + o.getHeight())
+                return true;
         }
+        return false;
+    }
+
+    public void traceBack(){
+        TreeNode start = this.nodeList.get(nodeList.size()-1);
+        while(start != startNode){
+            start.setColor(this.parent.color(0,0,255));
+            getEdge(start,start.getParentNode()).setColor(this.parent.color(0,0,255));
+            start = start.getParentNode();
+        }
+    }
+
+    // Returns the incident edge between vertex 'A' and vertex 'B'
+    public Edge getEdge(TreeNode a, TreeNode b){
+        for(Edge e : edgeList){
+            if(e.connects(a,b))
+                return e;
+        }
+        return null;
     }
 
 }

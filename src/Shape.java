@@ -18,9 +18,10 @@ import processing.core.PApplet;
 public abstract class Shape {
 
     protected PApplet parent;
-    private int xCoord, yCoord, width, height, color;
+    private float xCoord, yCoord;
+    private int width, height, color;
 
-    Shape(int xCoord, int yCoord, int width, int height, int color, PApplet parent){
+    Shape(float xCoord, float yCoord, int width, int height, int color, PApplet parent){
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.width  = width;
@@ -29,15 +30,23 @@ public abstract class Shape {
         this.parent = parent;
     }
 
-    public int getxCoord() {
+    public float getxCoord() {
         return xCoord;
     }
 
-    public void setxCoord(int xCoord) {
+    public void setxCoord(float xCoord) {
         this.xCoord = xCoord;
     }
 
-    public void setCoordinates(int xCoord, int yCoord){
+    public float getyCoord() {
+        return yCoord;
+    }
+
+    public void setyCoord(float yCoord) {
+        this.yCoord = yCoord;
+    }
+
+    public void setCoordinates(float xCoord, float yCoord){
         this.xCoord = xCoord;
         this.yCoord = yCoord;
     }
@@ -45,14 +54,6 @@ public abstract class Shape {
     public void setSize(int width, int height){
         this.width  = width;
         this.height = height;
-    }
-
-    public int getyCoord() {
-        return yCoord;
-    }
-
-    public void setyCoord(int yCoord) {
-        this.yCoord = yCoord;
     }
 
     public int getWidth() {

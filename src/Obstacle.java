@@ -1,7 +1,7 @@
 import processing.core.PApplet;
 
 public class Obstacle extends Shape{
-    public Obstacle(int xCoord, int yCoord, int width, int height, int color, PApplet parent){
+    public Obstacle(float xCoord, float yCoord, int width, int height, int color, PApplet parent){
         super(xCoord,yCoord,width,height,color, parent);
     }
 
