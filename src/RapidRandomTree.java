@@ -2,6 +2,9 @@ import processing.core.PApplet;
 import java.util.Random;
 import java.util.ArrayList;
 
+import static processing.core.PApplet.sq;
+import static processing.core.PApplet.sqrt;
+
 /**
  * Created by Blake on 5/27/17.
  */
@@ -28,6 +31,10 @@ public class RapidRandomTree {
     public void addNode(TreeNode newNode){
         nodeList.add(newNode);
     }
+
+    public void addEdge(Edge newEdge) { edgeList.add(newEdge); }
+
+    public void addObstacle(Obstacle newObstacle) { obstacleList.add(newObstacle); }
 
     public TreeNode getRoot(){
         return startNode;
@@ -87,7 +94,19 @@ public class RapidRandomTree {
         drawObstacles();
     }
 
+    // Returns true if a vertex 'a' is intersecting with a vertex 'b'
+    public boolean intersectingGoalNode(TreeNode a, TreeNode b){
+        return (a.getxCoord() >= b.getxCoord() && a.getxCoord() <= b.getxCoord() + b.getWidth()
+                && a.getyCoord() >= b.getyCoord() && a.getyCoord() <= b.getyCoord() + b.getHeight());
+    }
 
+    // Returns true if a vertex 'a' is intersecting with an obstacle object
+    public boolean intersectingObstacle(TreeNode a){
+        for(Obstacle o : obstacleList) {
+            return (a.getxCoord() >= o.getxCoord() && a.getxCoord() <= o.getxCoord() + o.getWidth()
+                    && a.getyCoord() >= o.getyCoord() && a.getyCoord() <= o.getyCoord() + o.getHeight());
+        }
+    }
 
 }
 
