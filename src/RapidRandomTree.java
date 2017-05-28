@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import java.util.Random;
 import java.util.ArrayList;
 
 /**
@@ -9,12 +10,15 @@ public class RapidRandomTree {
     private PApplet parent;
     private ArrayList<TreeNode> nodeList;
     private ArrayList<Edge> edgeList;
+    private ArrayList<Obstacle> obstacleList;
     private TreeNode startNode, goalNode;
     private double stepLength;
 
-    public void RapidRandomTree(TreeNode startNode, TreeNode goalNode, double stepLength, PApplet parent){
+    public RapidRandomTree(TreeNode startNode, TreeNode goalNode, double stepLength, PApplet parent){
         this.parent = parent;
         nodeList = new ArrayList<>();
+        edgeList = new ArrayList<>();
+        obstacleList = new ArrayList<>();
         this.startNode = startNode;
         this.goalNode = goalNode;
         this.stepLength = stepLength;
@@ -47,6 +51,21 @@ public class RapidRandomTree {
         return nearestNode;
     }
 
+    public TreeNode getRandomConfig(){
+        Random rand = new Random();
+        int randomXCoord = rand.nextInt(rrt.SCREEN_WIDTH) + 1;
+        int randomYCoord = rand.nextInt(rrt.SCREEN_HEIGHT) + 1;
+        return new TreeNode(randomXCoord, randomYCoord, rrt.NODE_WIDTH, rrt.NODE_HEIGHT, rrt.node_color, parent);
+    }
+
+    // Draws all vertices in the graph to the screen
+    private void drawObstacles(){
+        for(Obstacle o: obstacleList){
+            o.display();
+            parent.fill(255, 255, 0);
+        }
+    }
+
     // Draws all vertices in the graph to the screen
     private void drawVertices(){
         for(TreeNode n: nodeList){
@@ -65,7 +84,10 @@ public class RapidRandomTree {
     public void display() {
         drawEdges();
         drawVertices();
+        drawObstacles();
     }
+
+
 
 }
 
