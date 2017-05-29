@@ -1,7 +1,12 @@
+/****************************
+ * Author: Blake A. Molina
+ * Created on: 5/27/17
+ * License: GPL
+ ****************************/
 import processing.core.PApplet;
 
 /*******************************************************************
- *  CLASS Edge
+ *  CLASS Edge EXTENDS Shape
  *
  *  OVERVIEW: A class that represents a single Edge object. An edge
  *  object is defined to have a source(a) and destination TreeNode(b),
@@ -9,10 +14,9 @@ import processing.core.PApplet;
  *  is which.
  *
  *  CONSTRUCTOR PARAMETERS:
- *   a (TreeNode)       : a connected TreeNode, A
- *   b (TreeNode)       : a connected TreeNode, B
- *   color (int)      : color of edge
- *   weight (int)     : weight of edge
+ *   a (TreeNode)    : a connected TreeNode, A
+ *   b (TreeNode)    : a connected TreeNode, B
+ *   color (int)     : color of edge
  *
  ********************************************************************/
 public class Edge {

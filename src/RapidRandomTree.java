@@ -1,49 +1,65 @@
+/****************************
+ * Author: Blake A. Molina
+ * Created on: 5/27/17
+ * License: GPL
+ ****************************/
 import processing.core.PApplet;
 import java.util.Random;
 import java.util.ArrayList;
 
-import static processing.core.PApplet.parseByte;
-import static processing.core.PApplet.sq;
-import static processing.core.PApplet.sqrt;
-
-/**
- * Created by Blake on 5/27/17.
- */
-
+/********************************************************************
+ *  CLASS RapidRandomTree
+ *
+ *  OVERVIEW: A data structure that is designed to efficiently search
+ *  nonconvex, high-dimensional spaces by randomly building a space-filling
+ *  tree. The tree is constructed incrementally from samples drawn
+ *  randomly from the search space and is inherently biased to grow
+ *  towards large unsearched areas of the problem.
+ *
+ *  CONSTRUCTOR PARAMETERS:
+ *      PApplet parent     : Reference to Processing parent object
+ *                           (used for drawing to things to screen)
+ ********************************************************************/
 public class RapidRandomTree {
     private PApplet parent;
     private ArrayList<TreeNode> nodeList;
     private ArrayList<Edge> edgeList;
     private ArrayList<Obstacle> obstacleList;
     private TreeNode startNode, goalNode;
-    private double stepLength;
+    private int nodeCount;
 
-    public RapidRandomTree(TreeNode startNode, TreeNode goalNode, double stepLength, PApplet parent){
+    public RapidRandomTree(PApplet parent){
+        this.nodeCount = 0;
         this.parent = parent;
         nodeList = new ArrayList<>();
         edgeList = new ArrayList<>();
         obstacleList = new ArrayList<>();
-        this.startNode = startNode;
-        this.goalNode = goalNode;
-        this.stepLength = stepLength;
-        nodeList.add(startNode);
     }
 
     public void addNode(TreeNode newNode){
         nodeList.add(newNode);
+        nodeCount++;
+    }
+
+    public void addGoalNode(TreeNode goalNode){
+        this.goalNode = goalNode;
+    }
+
+    public void addStartNode(TreeNode startNode){
+        this.startNode = startNode;
+        nodeList.add(startNode);
+        nodeCount++;
     }
 
     public void addEdge(Edge newEdge) { edgeList.add(newEdge); }
 
     public void addObstacle(Obstacle newObstacle) { obstacleList.add(newObstacle); }
 
-    public TreeNode getRoot(){
-        return startNode;
-    }
-
     public TreeNode getgoalNode() {
         return goalNode;
     }
+
+    public int getNodeCount() { return nodeCount; }
 
     // Returns nearest node to a pair of vertices (goalNode) on the main screen
     public TreeNode getNearestNode(float xCoord, float yCoord){
@@ -59,6 +75,7 @@ public class RapidRandomTree {
         return nearestNode;
     }
 
+    // Returns a tree node with random coordinates
     public TreeNode getRandomConfig(){
         Random rand = new Random();
         float randomXCoord = rand.nextInt(rrt.SCREEN_WIDTH) + 1;
@@ -67,7 +84,7 @@ public class RapidRandomTree {
     }
 
     // Draws all vertices in the graph to the screen
-    private void drawObstacles(){
+    public void drawObstacles(){
         for(Obstacle o: obstacleList){
             o.display();
             parent.fill(255, 255, 0);
@@ -80,8 +97,10 @@ public class RapidRandomTree {
             n.display();
             parent.fill(255, 255, 0);
         }
-        startNode.display();
-        goalNode.display();
+        if(!nodeList.isEmpty())
+            startNode.display();
+        if(goalNode != null)
+            goalNode.display();
     }
 
     // Draws all edges in the graph to the screen.
@@ -113,7 +132,8 @@ public class RapidRandomTree {
         return false;
     }
 
-    public void traceBack(){
+    // Draws path in blue from the goal node back to the start node
+    public void traceBackToRoot(){
         TreeNode start = this.nodeList.get(nodeList.size()-1);
         while(start != startNode){
             start.setColor(this.parent.color(0,0,255));
