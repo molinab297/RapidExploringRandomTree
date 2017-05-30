@@ -9,9 +9,6 @@ A rapidly exploring random tree (RRT) is an algorithm designed to efficiently se
 ![Alt text](https://cloud.githubusercontent.com/assets/10769110/26565142/6e40e794-449d-11e7-94a7-747c6ea31b4a.png)
 
 ### Example 1) App finding path with 0% bias
-![Alt tex](https://cloud.githubusercontent.com/assets/10769110/26564628/351aa6c6-4498-11e7-80b5-5d16fd74bd42.gif)
-
-### Example 2) Same as example 1 but with slightly harder obstacles
 ![Alt text](https://cloud.githubusercontent.com/assets/10769110/26564807/7a366f54-449a-11e7-8f6b-73e5ecf1da39.gif)
 
 ## RRT* 
