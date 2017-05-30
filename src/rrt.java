@@ -8,11 +8,11 @@ import processing.core.PApplet;
 public class rrt extends PApplet {
 
     public static final int SCREEN_WIDTH = 1200, SCREEN_HEIGHT = 750;
-    public static final int NODE_WIDTH = 1, NODE_HEIGHT = 1, SPECIAL_NODE_WIDTH = 30, SPECIAL_NODE_HEIGHT = 30;
-    public static final float STEP_LENGTH = 20f; // adjust for length of branches
-    public static final int NODE_LIMIT = 250;    // adjust for max amount of time that algorithm can spend looking for goal node
-    public static int node_color;
-    private boolean goalNodeFound,locked;
+    public static final int NODE_WIDTH = 10, NODE_HEIGHT = 10, SPECIAL_NODE_WIDTH = 30, SPECIAL_NODE_HEIGHT = 30;
+    public static final float STEP_LENGTH = 20f;  // adjust for length of branches
+    public static final int NODE_LIMIT = 2000;    // adjust for max amount of time that algorithm can spend looking for goal node
+    public static int node_color, start_node_color, end_node_color, edge_color, obstacle_color;
+    private boolean goalNodeFound,locked, resourcesEmpty;
     private RapidRandomTree rapidRandomTree;
     private int counter;
     private int obstacleX, obstacleY, obstacleWidth, obstacleHeight;
@@ -29,7 +29,12 @@ public class rrt extends PApplet {
         counter          = 0;
         goalNodeFound    = false;
         locked           = false;
-        node_color       = color(255,0,0);
+        resourcesEmpty   = false;
+        node_color       = color(34,139,34);
+        start_node_color = color(0,0,255);
+        end_node_color   = color(255,0,0);
+        edge_color       = color(0,255,0);
+        obstacle_color   = color(205,133,63);
         rapidRandomTree  = new RapidRandomTree(this);
     }
 
@@ -40,14 +45,20 @@ public class rrt extends PApplet {
         rapidRandomTree.display();
         if(locked)
             rect(obstacleX,obstacleY,obstacleWidth,obstacleHeight);
+        if(resourcesEmpty){
+            textSize(50);
+            fill(255,255,0);
+            textAlign(CENTER);
+            text("Ran out of nodes!",SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
+        }
     }
 
     public void mousePressed(){
         if(mouseButton == RIGHT){
             if(counter ==  0)
-                rapidRandomTree.addStartNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH, SPECIAL_NODE_HEIGHT,color(50,205,50), this));
+                rapidRandomTree.addStartNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH, SPECIAL_NODE_HEIGHT,start_node_color, this));
             else if(counter == 1)
-                rapidRandomTree.addGoalNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH, SPECIAL_NODE_HEIGHT,color(128,0,128), this));
+                rapidRandomTree.addGoalNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH+15, SPECIAL_NODE_HEIGHT+15,end_node_color, this));
             counter++;
         }
         else if(mouseButton == LEFT){
@@ -66,7 +77,7 @@ public class rrt extends PApplet {
 
     public void mouseReleased(){
         locked = false;
-        rapidRandomTree.addObstacle(new Obstacle(obstacleX,obstacleY,abs(obstacleWidth),abs(obstacleHeight),this.color(160,82,45),this));
+        rapidRandomTree.addObstacle(new Obstacle(obstacleX,obstacleY,abs(obstacleWidth),abs(obstacleHeight),obstacle_color,this));
         obstacleX = 0;
         obstacleY = 0;
         obstacleHeight = 0;
@@ -87,7 +98,7 @@ public class rrt extends PApplet {
                         && !rapidRandomTree.intersectingObstacle(randomNode)){
                     randomNode.setParentNode(nearestNode);
                     rapidRandomTree.addNode(randomNode);
-                    rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, color(255,0,0)));
+                    rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, edge_color));
                 }
                 else{
                     // Re-position random node
@@ -97,24 +108,22 @@ public class rrt extends PApplet {
                     if(!rapidRandomTree.intersectingObstacle(randomNode)){
                         randomNode.setParentNode(nearestNode);
                         rapidRandomTree.addNode(randomNode);
-                        rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, color(255,0,0)));
+                        rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, edge_color));
                     }
                 }
 
                 // if goal node found
-                if(rapidRandomTree.intersectingGoalNode(randomNode, rapidRandomTree.getgoalNode()))
+                if(rapidRandomTree.intersectingGoalNode(randomNode)) {
                     goalNodeFound = true;
+                }
             }
             // Goal node found, display path (in blue) back to root node
             else if(goalNodeFound)
                 rapidRandomTree.traceBackToRoot();
             // Ran out of resources. Process will be aborted
-            else{
-                textSize(50);
-                fill(255,255,0);
-                textAlign(CENTER);
-                text("Ran out of nodes!",SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
-            }
+            else
+                resourcesEmpty = true;
+
     }
 
 }

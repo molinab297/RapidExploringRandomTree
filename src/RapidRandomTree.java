@@ -117,9 +117,9 @@ public class RapidRandomTree {
     }
 
     // Returns true if a vertex 'a' is intersecting with a vertex 'b'
-    public boolean intersectingGoalNode(TreeNode a, TreeNode b){
-        return (a.getxCoord() >= b.getxCoord() && a.getxCoord() <= b.getxCoord() + b.getWidth()
-                && a.getyCoord() >= b.getyCoord() && a.getyCoord() <= b.getyCoord() + b.getHeight());
+    public boolean intersectingGoalNode(TreeNode a){
+        return (a.getxCoord() >= goalNode.getxCoord() && a.getxCoord() <= goalNode.getxCoord() + (float)goalNode.getWidth()
+                && a.getyCoord() >= goalNode.getyCoord() && a.getyCoord() <= goalNode.getyCoord() + (float)goalNode.getHeight());
     }
 
     // Returns true if a vertex 'a' is intersecting with an obstacle object

@@ -31,6 +31,7 @@ public class TreeNode extends Shape{
 
     public void display(){
         parent.fill(getColor());
+        parent.ellipseMode(parent.CENTER);
         parent.ellipse(getxCoord(), getyCoord(), getWidth(), getHeight());
     }
 
