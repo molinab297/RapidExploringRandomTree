@@ -14,7 +14,7 @@ A rapidly exploring random tree (RRT) is an algorithm designed to efficiently se
 
 ## RRT* (Slightly smarter version of RRT)
 
-The RRT* is the same thing as an RRT except that the algorithm performs a "rewiring" of nodes if it sees theres a shorter path from the start node to a newly inserted node, which causes the branches to "fan out" and perform a more efficient search, at the cost of more computation power.
+The RRT* is the same thing as an RRT except that the algorithm performs a "rewiring" of nodes if it sees there is a shorter path from the start node to a newly inserted node, which causes the branches to "fan out" and perform a more efficient search for the goal node, at the cost of more computation power.
 
 ### Example 1).
 ![Alt text](https://cloud.githubusercontent.com/assets/10769110/26600237/2daeaf16-4530-11e7-92c2-ce7ed6813f56.png)
