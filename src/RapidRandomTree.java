@@ -41,6 +41,12 @@ public class RapidRandomTree {
         nodeCount++;
     }
 
+    public void addNode(TreeNode newNode, TreeNode parent){
+        newNode.setParentNode(parent);
+        nodeList.add(newNode);
+        nodeCount++;
+    }
+
     public void addGoalNode(TreeNode goalNode){
         this.goalNode = goalNode;
     }
@@ -51,13 +57,13 @@ public class RapidRandomTree {
         nodeCount++;
     }
 
+    public TreeNode getStartNode() { return startNode; }
+
+    public ArrayList<TreeNode> getNodeList() {return nodeList; }
+
     public void addEdge(Edge newEdge) { edgeList.add(newEdge); }
 
     public void addObstacle(Obstacle newObstacle) { obstacleList.add(newObstacle); }
-
-    public TreeNode getgoalNode() {
-        return goalNode;
-    }
 
     public int getNodeCount() { return nodeCount; }
 
@@ -75,14 +81,6 @@ public class RapidRandomTree {
         return nearestNode;
     }
 
-    // Returns a tree node with random coordinates
-    public TreeNode getRandomConfig(){
-        Random rand = new Random();
-        float randomXCoord = rand.nextInt(rrt.SCREEN_WIDTH) + 1;
-        float randomYCoord = rand.nextInt(rrt.SCREEN_HEIGHT) + 1;
-        return new TreeNode(randomXCoord, randomYCoord, rrt.NODE_WIDTH, rrt.NODE_HEIGHT, rrt.node_color, parent);
-    }
-
     // Draws all vertices in the graph to the screen
     public void drawObstacles(){
         for(Obstacle o: obstacleList){
@@ -93,10 +91,6 @@ public class RapidRandomTree {
 
     // Draws all vertices in the graph to the screen
     private void drawVertices(){
-        for(TreeNode n: nodeList){
-            n.display();
-            parent.fill(255, 255, 0);
-        }
         if(!nodeList.isEmpty())
             startNode.display();
         if(goalNode != null)
@@ -136,8 +130,7 @@ public class RapidRandomTree {
     public void traceBackToRoot(){
         TreeNode start = this.nodeList.get(nodeList.size()-1);
         while(start != startNode){
-            start.setColor(this.parent.color(0,0,255));
-            getEdge(start,start.getParentNode()).setColor(this.parent.color(0,0,255));
+            getEdge(start,start.getParentNode()).setColorAndStrokeWeight(255, 2);
             start = start.getParentNode();
         }
     }

@@ -14,30 +14,43 @@ import processing.core.PApplet;
  *  is which.
  *
  *  CONSTRUCTOR PARAMETERS:
- *   a (TreeNode)    : a connected TreeNode, A
- *   b (TreeNode)    : a connected TreeNode, B
- *   color (int)     : color of edge
+ *   a (TreeNode)       : a connected TreeNode, A
+ *   b (TreeNode)       : a connected TreeNode, B
+ *   color (int)        : color of edge
+ *   strokeWeight (int) : thickness of edge (default 1)
  *
  ********************************************************************/
 public class Edge {
 
     private TreeNode a, b;
-    private int color;
+    private int color, strokeWeight;
 
-    public Edge(TreeNode a, TreeNode b, int color){
+    public Edge(TreeNode a, TreeNode b, int color, int strokeWeight){
         this.a = a;
         this.b = b;
         this.color  = color;
+        this.strokeWeight = strokeWeight;
     }
 
     // Draws individual edge to screen
     public void display(PApplet parent){
         parent.stroke(color);
+        parent.strokeWeight(strokeWeight);
         parent.line(a.getxCoord(),a.getyCoord(),b.getxCoord(),b.getyCoord());
         parent.stroke(0);
     }
 
+    public void setColorAndStrokeWeight(int color, int strokeWeight){
+        this.color = color;
+        this.strokeWeight = strokeWeight;
+    }
+
     public void setColor(int c){ color = c; }
+
+    public void setStrokeWeight(int strokeWeight){
+        this.strokeWeight = strokeWeight;
+    }
+
     public void connect(TreeNode a, TreeNode b){
         this.a = a;
         this.b = b;
