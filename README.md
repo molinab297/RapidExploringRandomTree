@@ -2,8 +2,7 @@
 
 RRT and RRT * algorithm written in Processing/Java.
 
-GIF of a standard Rapidly-Exploring Random Tree
-
+### GIF of a standard Rapidly-Exploring Random Tree
 ![Alt text](https://cloud.githubusercontent.com/assets/10769110/26603698/adf2a14e-453c-11e7-9ef0-b2473d852a43.gif)
 
 (GIF from https://en.wikipedia.org/wiki/Rapidly-exploring_random_tree)
