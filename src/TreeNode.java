@@ -23,7 +23,9 @@ import processing.core.PApplet;
  ********************************************************************/
 public class TreeNode extends Shape{
 
-    TreeNode parentNode;
+    private TreeNode parentNode;
+    private int cost;
+
 
     public TreeNode(float xCoord, float yCoord, int width, int height, int color, PApplet parent){
         super(xCoord,yCoord,width,height,color, parent);
@@ -31,9 +33,14 @@ public class TreeNode extends Shape{
 
     public void display(){
         parent.fill(getColor());
-        parent.ellipseMode(parent.CENTER);
-        parent.ellipse(getxCoord(), getyCoord(), getWidth(), getHeight());
+        parent.rect(getxCoord(), getyCoord(), getWidth(), getHeight());
     }
+
+    public void setCost(int cost){
+        this.cost = cost;
+    }
+
+    public int getCost(){ return cost; }
 
     public void setParentNode(TreeNode parent){
         this.parentNode = parent;

@@ -7,7 +7,7 @@ import processing.core.PApplet;
 
 public class rrt extends PApplet {
 
-    public static final int SCREEN_WIDTH = 1200, SCREEN_HEIGHT = 750;
+    public static final int SCREEN_WIDTH = 1200, SCREEN_HEIGHT = 800;
     public static final int NODE_WIDTH = 10, NODE_HEIGHT = 10, SPECIAL_NODE_WIDTH = 30, SPECIAL_NODE_HEIGHT = 30;
     public static final float STEP_LENGTH = 20f;  // adjust for length of branches
     public static final int NODE_LIMIT = 2000;    // adjust for max amount of time that algorithm can spend looking for goal node
@@ -34,12 +34,12 @@ public class rrt extends PApplet {
         start_node_color = color(0,0,255);
         end_node_color   = color(255,0,0);
         edge_color       = color(0,255,0);
-        obstacle_color   = color(205,133,63);
+        obstacle_color   = color(160,82,45);
         rapidRandomTree  = new RapidRandomTree(this);
     }
 
     public void draw() {
-        background(0, 0, 20);
+        background(color(0));
         if(counter > 1)
             update();
         rapidRandomTree.display();
@@ -54,13 +54,15 @@ public class rrt extends PApplet {
     }
 
     public void mousePressed(){
+        // Right click to add start and end nodes
         if(mouseButton == RIGHT){
             if(counter ==  0)
                 rapidRandomTree.addStartNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH, SPECIAL_NODE_HEIGHT,start_node_color, this));
             else if(counter == 1)
-                rapidRandomTree.addGoalNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH+15, SPECIAL_NODE_HEIGHT+15,end_node_color, this));
+                rapidRandomTree.addGoalNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH+5, SPECIAL_NODE_HEIGHT+5,end_node_color, this));
             counter++;
         }
+        // Left click and drag to draw an obstacle
         else if(mouseButton == LEFT){
             locked = true;
             obstacleX = mouseX;
@@ -68,6 +70,7 @@ public class rrt extends PApplet {
         }
     }
 
+    // For drawing obstacles
     public void mouseDragged(){
         if(locked){
             obstacleWidth = mouseX - obstacleX;
@@ -75,13 +78,11 @@ public class rrt extends PApplet {
         }
     }
 
+    // For drawing obstacles
     public void mouseReleased(){
         locked = false;
         rapidRandomTree.addObstacle(new Obstacle(obstacleX,obstacleY,abs(obstacleWidth),abs(obstacleHeight),obstacle_color,this));
-        obstacleX = 0;
-        obstacleY = 0;
-        obstacleHeight = 0;
-        obstacleWidth = 0;
+        obstacleX = 0; obstacleY = 0; obstacleHeight = 0; obstacleWidth = 0;
     }
 
     // RRT algorithm

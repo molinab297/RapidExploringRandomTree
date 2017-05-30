@@ -34,7 +34,7 @@ public class Edge {
     public void display(PApplet parent){
         parent.stroke(color);
         parent.line(a.getxCoord(),a.getyCoord(),b.getxCoord(),b.getyCoord());
-        parent.stroke(255);
+        parent.stroke(0);
     }
 
     public void setColor(int c){ color = c; }
