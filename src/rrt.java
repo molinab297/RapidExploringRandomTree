@@ -11,8 +11,8 @@ import java.util.Random;
 /* Driver class */
 public class rrt extends PApplet {
 
-    public static final int SCREEN_WIDTH = 1000, SCREEN_HEIGHT = 700;
-    public static final int NODE_WIDTH = 10, NODE_HEIGHT = 10, SPECIAL_NODE_WIDTH = 30, SPECIAL_NODE_HEIGHT = 30;
+    public static final int SCREEN_WIDTH = 720, SCREEN_HEIGHT = 500;
+    public static final int NODE_WIDTH = 5, NODE_HEIGHT = 5, SPECIAL_NODE_WIDTH = 30, SPECIAL_NODE_HEIGHT = 30;
     public static final float STEP_LENGTH = 30f;  // adjust for length of branches
     public static final int NODE_LIMIT = 3000;    // adjust for max amount of time that algorithm can spend looking for goal node
     public static int node_color, start_node_color, end_node_color, obstacle_color;
@@ -68,6 +68,7 @@ public class rrt extends PApplet {
             textAlign(CENTER);
             text(node_error_msg,SCREEN_WIDTH/2,SCREEN_HEIGHT/2);
         }
+
         rapidRandomTree.display();
     }
 
@@ -103,7 +104,7 @@ public class rrt extends PApplet {
         }
     }
 
-    // RRT algorithm
+    // RRT* algorithm
     private void update(){
 
         // If we have not found the goal node and still have resources
@@ -160,8 +161,16 @@ public class rrt extends PApplet {
             }
 
             // if goal node found
-            if(rapidRandomTree.intersectingGoalNode(rand) || rapidRandomTree.intersectingGoalNode(rand2)
-                    || rapidRandomTree.intersectingGoalNode(rand3)) {
+            if(rapidRandomTree.intersectingGoalNode(rand)){
+                rapidRandomTree.getGoalNode().setParentNode(rand);
+                goalNodeFound = true;
+            }
+            else if(rapidRandomTree.intersectingGoalNode(rand2)){
+                rapidRandomTree.getGoalNode().setParentNode(rand2);
+                goalNodeFound = true;
+            }
+            else if(rapidRandomTree.intersectingGoalNode(rand3)){
+                rapidRandomTree.getGoalNode().setParentNode(rand3);
                 goalNodeFound = true;
             }
         }

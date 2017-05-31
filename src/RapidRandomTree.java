@@ -59,6 +59,8 @@ public class RapidRandomTree {
 
     public TreeNode getStartNode() { return startNode; }
 
+    public TreeNode getGoalNode() { return goalNode; }
+
     public ArrayList<TreeNode> getNodeList() {return nodeList; }
 
     public void addEdge(Edge newEdge) { edgeList.add(newEdge); }
@@ -128,9 +130,9 @@ public class RapidRandomTree {
 
     // Draws path in blue from the goal node back to the start node
     public void traceBackToRoot(){
-        TreeNode start = this.nodeList.get(nodeList.size()-1);
+        TreeNode start = this.goalNode.getParentNode();
         while(start != startNode){
-            getEdge(start,start.getParentNode()).setColorAndStrokeWeight(255, 2);
+            edgeList.add(new Edge(start,start.getParentNode(), 255, 2));
             start = start.getParentNode();
         }
     }
