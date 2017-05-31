@@ -70,11 +70,11 @@ public class RapidRandomTree {
     public int getNodeCount() { return nodeCount; }
 
     // Returns nearest node to a pair of vertices (goalNode) on the main screen
-    public TreeNode getNearestNode(float xCoord, float yCoord){
+    public TreeNode getNearestNode(TreeNode node){
         TreeNode nearestNode = startNode;
-        float shortestDistance = parent.dist(nearestNode.getxCoord(), nearestNode.getyCoord(), xCoord, yCoord);
+        float shortestDistance = parent.dist(nearestNode.getxCoord(), nearestNode.getyCoord(), node.getxCoord(), node.getyCoord());
         for(TreeNode currentNode : nodeList){
-            float temp = parent.dist(currentNode.getxCoord(), currentNode.getyCoord(), xCoord, yCoord);
+            float temp = parent.dist(currentNode.getxCoord(), currentNode.getyCoord(), node.getxCoord(), node.getyCoord());
             if(temp < shortestDistance){
                 nearestNode = currentNode;
                 shortestDistance = temp;
