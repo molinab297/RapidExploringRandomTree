@@ -9,7 +9,7 @@ RRT and RRT * algorithm written in Processing/Java.
 
 A rapidly exploring random tree (RRT) is an algorithm designed to efficiently search nonconvex, high-dimensional spaces by randomly building a space-filling tree. The tree is constructed incrementally from samples drawn randomly from the search space and is inherently biased to grow towards large unsearched areas. They easily handle problems with obstacles and differential constraints and have been widely used in autonomous robotic motion planning.
 
-The RRT* algorithm is almost the same the regular RRT algortihm except for the algorithm factors in a 'cost' attribute from the start node to every new node that is randomly generated. The tree rewires itself accordingly based on that cost factor, which causes the tree to feather out with a more outward movement of the unsearched configuration space. The visual differences can be seen in the demonstrations below, although it is worthy to note that this becomes more apparent as the number of iterations increases.
+The RRT* algorithm is almost the same as the regular RRT algortihm except for the algorithm factors in a 'cost' attribute which is the distance from the root node to every new node that is randomly generated in the tree. The tree 'rewires' itself accordingly based on that cost factor, which causes the tree to feather out with a more outward movement of the unsearched configuration space. The visual differences can be seen in the demonstrations below, although it is worthy to note that this becomes more apparent as the number of iterations increases.
 
 ## Pics of Algorithm Performing Searches
 Note: Blue node is the starting point, red node is the end point, and brown rectangles are obstacles. 
