@@ -10,21 +10,19 @@ import java.util.Random;
 /* Driver class */
 public class rrt extends PApplet {
 
-    private static final int SCREEN_WIDTH           = 720;
-    private static final int SCREEN_HEIGHT          = 500;
-    private static final int NODE_WIDTH             = 5;
-    private static final int NODE_HEIGHT            = 5;
-    private static final int SPECIAL_NODE_WIDTH     = 30;
-    private static final int SPECIAL_NODE_HEIGHT    = 30;
-    private static final float STEP_LENGTH          = 7.0f;  // adjust for length of branches
+    private static final int SCREEN_WIDTH           = 1250;
+    private static final int SCREEN_HEIGHT          = 900;
+    public static final int NODE_WIDTH              = 5;
+    public static final int NODE_HEIGHT             = 5;
+    private static final float STEP_LENGTH          = 10f;  // adjust for length of branches
     private static final float NEIGHBORHOOD_RADIUS  = 30f;
-    private static final int NODE_LIMIT             = 5000;  // adjust for max amount of time that algorithm can spend looking for goal node
+    private static final int NODE_LIMIT             = 10000; // adjust for max amount of time that algorithm can spend looking for goal node
     private boolean goalNodeFound, locked, resourcesEmpty;
     private RapidRandomTree rapidRandomTree;
     private int counter, obstacleX, obstacleY, obstacleWidth, obstacleHeight;
     private String branch_count, node_error_msg;
     // Processing color constants
-    public static int node_color, start_node_color, end_node_color, obstacle_color, edge_color_1, edge_color_2, edge_color_3;
+    public static int node_color, start_node_color, end_node_color, obstacle_color, edge_color;
 
     public static void main(String[] args) {
         PApplet.main("rrt");
@@ -43,9 +41,7 @@ public class rrt extends PApplet {
         node_color       = color(34,139,34);
         start_node_color = color(0,0,255);
         end_node_color   = color(255,0,0);
-        edge_color_1     = color(210,105,30);
-        edge_color_2     = color(34,139,34);
-        edge_color_3     = color(0,100,0);
+        edge_color       = color(0,255,0);
         obstacle_color   = color(160,82,45);
         rapidRandomTree  = new RapidRandomTree(this);
     }
@@ -78,9 +74,9 @@ public class rrt extends PApplet {
         // Right click to add start and end nodes
         if(mouseButton == RIGHT){
             if(counter ==  0)
-                rapidRandomTree.addStartNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH, SPECIAL_NODE_HEIGHT,start_node_color, this));
+                rapidRandomTree.addStartNode(new TreeNode(mouseX,mouseY,NODE_WIDTH+25,NODE_HEIGHT+25,start_node_color, this));
             else if(counter == 1)
-                rapidRandomTree.addGoalNode(new TreeNode(mouseX,mouseY,SPECIAL_NODE_WIDTH+5, SPECIAL_NODE_HEIGHT+5,end_node_color, this));
+                rapidRandomTree.addGoalNode(new TreeNode(mouseX,mouseY,NODE_WIDTH+25,NODE_HEIGHT+25,end_node_color, this));
             counter++;
         }
         // Left click and drag to draw an obstacle
@@ -114,13 +110,12 @@ public class rrt extends PApplet {
             TreeNode randomNode = new TreeNode(0,0,NODE_WIDTH,NODE_HEIGHT,node_color,this);
             setRandomConfig(randomNode);
             // Find vertex in tree closest to that random location
-            TreeNode nearestNode = rapidRandomTree.getNearestNode(randomNode);
+            TreeNode nearestNode = nearestNode(randomNode);
             // Add path if in range of step length and not colliding with an obstacle
             if(dist(randomNode.getxCoord(),randomNode.getyCoord(),nearestNode.getxCoord(),nearestNode.getyCoord()) <= STEP_LENGTH
                     && !rapidRandomTree.intersectingObstacle(randomNode)){
-                randomNode.setParentNode(nearestNode);
-                rapidRandomTree.addNode(randomNode);
-                rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, edge_color_2,1));
+                rapidRandomTree.addNode(randomNode, nearestNode);
+                rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, edge_color, 1));
             }
             else{
                 // Re-position random node
@@ -128,9 +123,9 @@ public class rrt extends PApplet {
                 randomNode.setCoordinates(nearestNode.getxCoord() + STEP_LENGTH*(float)Math.cos(theta), nearestNode.getyCoord() + STEP_LENGTH*(float)Math.sin(theta));
                 // If new coordinates of random now are not intersecting an obstacle, add node
                 if(!rapidRandomTree.intersectingObstacle(randomNode)){
-                    randomNode.setParentNode(nearestNode);
-                    rapidRandomTree.addNode(randomNode);
-                    rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, edge_color_2,1));
+                    rapidRandomTree.addNode(randomNode, nearestNode);
+                    rapidRandomTree.addEdge(new Edge(nearestNode, randomNode, edge_color, 1));
+                    rewire(randomNode);
                 }
             }
 
@@ -177,6 +172,19 @@ public class rrt extends PApplet {
         return nearestNode;
     }
 
-
+    private void rewire(TreeNode randomNode){
+        ArrayList<TreeNode> nodeList = rapidRandomTree.getNodeList();
+        TreeNode root = rapidRandomTree.getStartNode();
+        for(TreeNode currentNode : nodeList){
+            // make sure node being checked is within radius
+            if(distance(currentNode, randomNode) <= NEIGHBORHOOD_RADIUS){
+                if(distance(root,randomNode) + distance(randomNode,currentNode) < distance(root,currentNode)){
+                    // re-parent node and remove edge
+                    currentNode.setParentNode(randomNode);
+                    rapidRandomTree.removeEdge(randomNode,currentNode);
+                }
+            }
+        }
+    }
 
 }

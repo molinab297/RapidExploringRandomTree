@@ -36,11 +36,6 @@ public class RapidRandomTree {
         obstacleList = new ArrayList<>();
     }
 
-    public void addNode(TreeNode newNode){
-        nodeList.add(newNode);
-        nodeCount++;
-    }
-
     public void addNode(TreeNode newNode, TreeNode parent){
         newNode.setParentNode(parent);
         nodeList.add(newNode);
@@ -112,6 +107,16 @@ public class RapidRandomTree {
         drawObstacles();
     }
 
+    // Returns true if node a is intersecting any node in the calling RRT
+    public boolean intersecting(TreeNode a){
+        for(TreeNode currentNode : nodeList){
+            if(Math.pow(currentNode.getxCoord()-a.getxCoord(),2)+Math.pow(currentNode.getyCoord()-a.getyCoord(),2)
+                    <= Math.pow(rrt.NODE_WIDTH,2))
+                return true;
+        }
+        return false;
+    }
+
     // Returns true if a vertex 'a' is intersecting with a vertex 'b'
     public boolean intersectingGoalNode(TreeNode a){
         return (a.getxCoord() >= goalNode.getxCoord() && a.getxCoord() <= goalNode.getxCoord() + (float)goalNode.getWidth()
@@ -146,6 +151,15 @@ public class RapidRandomTree {
         return null;
     }
 
+    // removes an edge between two nodes
+    public void removeEdge(TreeNode a, TreeNode b){
+        if(a != null && b != null){
+            for(Edge e : edgeList){
+                if(e.connects(a,b))
+                    edgeList.remove(e);
+            }
+        }
+    }
 
 }
 
